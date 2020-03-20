@@ -439,7 +439,7 @@ EOF
             echo -e "Generating SSL self-signed certificate"
             openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /moodle/certs/nginx.key -out /moodle/certs/nginx.crt -subj "/C=US/ST=WA/L=Redmond/O=IT/CN=$siteFQDN"
         fi
-        www-data:www-data /moodle/certs/nginx.*
+        chown www-data:www-data /moodle/certs/nginx.*
         chmod 0400 /moodle/certs/nginx.*
     fi
 
