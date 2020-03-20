@@ -106,6 +106,7 @@ set -ex
     fi
 
     sudo apt-get -y update                                                   >> /tmp/apt2.log
+    sudo apt-get -y upgrade						     >> /tmp/apt2.log
     sudo apt-get -y --force-yes install rsyslog git                          >> /tmp/apt3.log
 
     if [ $fileServerType = "gluster" ]; then
@@ -168,20 +169,22 @@ set -ex
         configure_nfs_client_and_mount0 $nfsByoIpExportPath /moodle
     fi
     
-    # install pre-requisites
-    sudo apt-get install -y --fix-missing python-software-properties unzip
+    # install pre-requisites & adding php7.2 repository
+    sudo apt-get install -y --fix-missing python-software-properties unzip software-properties-common
+    sudo add-apt-repository -y ppa:ondrej/php
+    sudo apt-get -y update
 
     # install the entire stack
-    sudo apt-get -y  --force-yes install nginx php-fpm varnish >> /tmp/apt5a.log
-    sudo apt-get -y  --force-yes install php php-cli php-curl php-zip >> /tmp/apt5b.log
+    sudo apt-get -y  --force-yes install nginx php7.2-fpm varnish >> /tmp/apt5a.log
+    sudo apt-get -y  --force-yes install php7.2 php7.2-cli php7.2-curl php7.2-zip php7.2-common >> /tmp/apt5b.log
 
     # Moodle requirements
     sudo apt-get -y update > /dev/null
-    sudo apt-get install -y --force-yes graphviz aspell php-common php-soap php-json php-redis > /tmp/apt6.log
-    sudo apt-get install -y --force-yes php-bcmath php-gd php-xmlrpc php-intl php-xml php-bz2 php-pear php-mbstring php-dev mcrypt >> /tmp/apt6.log
+    sudo apt-get install -y --force-yes graphviz aspell php7.2-common php7.2-soap php7.2-json php-redis > /tmp/apt6.log
+    sudo apt-get install -y --force-yes libapache2-mod-php7.2 php7.2-bcmath php7.2-gd php7.2-xmlrpc php7.2-intl php7.2-xml php7.2-bz2 php-pear php7.2-mbstring php7.2-dev mcrypt >> /tmp/apt6.log
     PhpVer=$(get_php_version)
     if [ $dbServerType = "mysql" ]; then
-        sudo apt-get install -y --force-yes php-mysql
+        sudo apt-get install -y --force-yes php7.2-mysql
     elif [ $dbServerType = "mssql" ]; then
         sudo apt-get install -y libapache2-mod-php  # Need this because install_php_mssql_driver tries to update apache2-mod-php settings always (which will fail without this)
         install_php_mssql_driver
@@ -205,7 +208,7 @@ set -ex
 
     if [ ! -d /moodle/html/moodle ]; then
         # downloading moodle only if /moodle/html/moodle does not exist -- if it exists, user should populate it in advance correctly as below. This is to reduce template deployment time.
-        /usr/bin/curl -k --max-redirs 10 https://github.com/moodle/moodle/archive/'$moodleVersion'.zip -L -o moodle.zip
+        /usr/bin/curl -k --max-redirs 10 https://download.moodle.org/download.php/stable38/moodle-latest-38.zip -L -o moodle.zip
         /usr/bin/unzip -q moodle.zip
         /bin/mv '$moodleUnzipDir' /moodle/html/moodle
     fi
