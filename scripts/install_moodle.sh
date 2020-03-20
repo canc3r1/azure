@@ -439,7 +439,7 @@ EOF
             echo -e "Generating SSL self-signed certificate"
             openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /moodle/certs/nginx.key -out /moodle/certs/nginx.crt -subj "/C=US/ST=WA/L=Redmond/O=IT/CN=$siteFQDN"
         fi
-        chown www-data:www-data /moodle/certs/nginx.*
+        www-data:www-data /moodle/certs/nginx.*
         chmod 0400 /moodle/certs/nginx.*
     fi
 
@@ -905,7 +905,9 @@ EOF
 #       sudo find /moodle/html/moodle -type f -exec chmod 644 '{}' \;
 #       sudo find /moodle/html/moodle -type d -exec chmod 755 '{}' \;
 #    fi
-    # But now we need to adjust the moodledata and the certs directory ownerships, and the permission for the generated config.php
+    
+    sudo chmod -R 777 /moodle/html/moodle
+    #But now we need to adjust the moodledata and the certs directory ownerships, and the permission for the generated config.php
     sudo chown -R www-data.www-data /moodle/moodledata /moodle/certs
     sudo chmod +r /moodle/html/moodle/config.php
 
