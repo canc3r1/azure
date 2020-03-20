@@ -83,7 +83,7 @@ check_fileServerType_param $fileServerType
   fi
 
   # Moodle requirements
-  sudo apt-get install -y graphviz aspell php-soap php-json php-redis php-bcmath php-gd php-pgsql php-mysql php-xmlrpc php-intl php-xml php-bz2
+  sudo apt-get install -y graphviz aspell php7.2-soap php7.2-json php-redis php7.2-bcmath php7.2-gd php7.2-pgsql php7.2-mysql php7.2-xmlrpc php7.2-intl php7.2-xml php7.2-bz2
   if [ "$dbServerType" = "mssql" ]; then
     install_php_mssql_driver
   fi
@@ -95,7 +95,7 @@ check_fileServerType_param $fileServerType
     # Mount gluster fs for /moodle
     sudo mkdir -p /moodle
     sudo chown www-data /moodle
-    sudo chmod 770 /moodle
+    sudo chmod 777 /moodle
     sudo echo -e 'Adding Gluster FS to /etc/fstab and mounting it'
     setup_and_mount_gluster_moodle_share $glusterNode $glusterVolume
   elif [ $fileServerType = "nfs" ]; then
