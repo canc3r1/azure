@@ -175,7 +175,7 @@ set -ex
     sudo apt-get -y update
 
     # install the entire stack
-    sudo apt-get -y  --force-yes install nginx php7.2-fpm varnish >> /tmp/apt5a.log
+    sudo apt-get -y  --force-yes install nginx php7.2 php7.2-cli php7.2-curl php7.2-zip php7.2-common php7.2-fpm varnish >> /tmp/apt5a.log
     sudo apt-get -y  --force-yes install php7.2 php7.2-cli php7.2-curl php7.2-zip php7.2-common >> /tmp/apt5b.log
 
     # Moodle requirements
@@ -198,8 +198,8 @@ set -ex
     mkdir -p /moodle/moodledata
 
     o365pluginVersion=$(get_o365plugin_version_from_moodle_version $moodleVersion)
-    moodleStableVersion=$o365pluginVersion  # Need Moodle stable version for GDPR plugins, and o365pluginVersion is just Moodle stable version, so reuse it.
-    moodleUnzipDir=$(get_moodle_unzip_dir_from_moodle_version $moodleVersion)
+    #moodleStableVersion=$o365pluginVersion  # Need Moodle stable version for GDPR plugins, and o365pluginVersion is just Moodle stable version, so reuse it.
+    #moodleUnzipDir=$(get_moodle_unzip_dir_from_moodle_version $moodleVersion)
 
     # install Moodle 
     echo '#!/bin/bash
@@ -208,9 +208,10 @@ set -ex
 
     if [ ! -d /moodle/html/moodle ]; then
         # downloading moodle only if /moodle/html/moodle does not exist -- if it exists, user should populate it in advance correctly as below. This is to reduce template deployment time.
-        /usr/bin/curl -k --max-redirs 10 https://download.moodle.org/download.php/stable38/moodle-latest-38.zip -L -o moodle.zip
-        /usr/bin/unzip -q moodle.zip
-        /bin/mv '$moodleUnzipDir' /moodle/html/moodle
+        # /usr/bin/curl -k --max-redirs 10 https://download.moodle.org/download.php/stable38/moodle-latest-38.zip -L -o moodle.zip
+	sudo /usr/bin/curl -k --max-redirs 10 https://download.moodle.org/download.php/direct/stable38/moodle-latest-38.zip -L -o moodle.zip
+        sudo unzip moodle.zip
+        sudo mv moodle /moodle/html/moodle
     fi
 
     if [ "'$installGdprPluginsSwitch'" = "true" ]; then
