@@ -49,17 +49,19 @@ check_fileServerType_param $fileServerType
 {
   # make sure the system does automatic update
   sudo apt-get -y update
-  sudo apt-get -y install unattended-upgrades
+  sudo apt-get -y -f install unattended-upgrades
   #sudo apt-get -y upgrade
 
   # install pre-requisites
-  sudo apt-get -y install python-software-properties unzip rsyslog
+  sudo apt-get -y -f install python-software-properties unzip rsyslog
   
   sudo add-apt-repository -y ppa:ondrej/php
   
   sudo apt-get -y update
   
-  sudo apt-get -y install postgresql-client mysql-client git
+  sudo apt-get -y -f install postgresql-client mysql-client git
+  
+  sudo dpkg --configure -a
 
   if [ $fileServerType = "gluster" ]; then
     #configure gluster repository & install gluster client
@@ -71,7 +73,8 @@ check_fileServerType_param $fileServerType
   fi
 
   # install the base stack
-  sudo apt-get -y install varnish php7.2 php7.2-cli php7.2-curl php7.2-zip php-pear php7.2-mbstring php7.2-dev mcrypt
+  sudo apt-get -y -f install varnish php7.2 php7.2-cli php7.2-curl php7.2-zip php-pear php7.2-mbstring php7.2-dev mcrypt
+  sudo dpkg --configure -a
 
   if [ "$webServerType" = "nginx" -o "$httpsTermination" = "VMSS" ]; then
     sudo apt-get -y install nginx
@@ -79,14 +82,14 @@ check_fileServerType_param $fileServerType
 
   if [ "$webServerType" = "apache" ]; then
     # install apache pacakges
-    sudo apt-get -y install apache2 libapache2-mod-php7.2
+    sudo apt-get -y -f install apache2 libapache2-mod-php7.2
   else
     # for nginx-only option
     sudo apt-get -y install php7.2-fpm
   fi
 
   # Moodle requirements
-  sudo apt-get install -y graphviz aspell php7.2-soap php7.2-json php-redis php7.2-bcmath php7.2-gd php7.2-pgsql php7.2-mysql php7.2-xmlrpc php7.2-intl php7.2-xml php7.2-bz2
+  sudo apt-get install -y -f graphviz aspell php7.2-soap php7.2-json php-redis php7.2-bcmath php7.2-gd php7.2-pgsql php7.2-mysql php7.2-xmlrpc php7.2-intl php7.2-xml php7.2-bz2
   if [ "$dbServerType" = "mssql" ]; then
     install_php_mssql_driver
   fi
