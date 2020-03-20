@@ -50,7 +50,7 @@ check_fileServerType_param $fileServerType
   # make sure the system does automatic update
   sudo apt-get -y update
   sudo apt-get -y install unattended-upgrades
-  sudo apt-get -y upgrade
+  #sudo apt-get -y upgrade
 
   # install pre-requisites
   sudo apt-get -y install python-software-properties software-properties-common unzip rsyslog
