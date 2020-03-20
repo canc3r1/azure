@@ -53,9 +53,12 @@ check_fileServerType_param $fileServerType
   #sudo apt-get -y upgrade
 
   # install pre-requisites
-  sudo apt-get -y install python-software-properties software-properties-common unzip rsyslog
+  sudo apt-get -y install python-software-properties unzip rsyslog
+  
   sudo add-apt-repository -y ppa:ondrej/php
+  
   sudo apt-get -y update
+  
   sudo apt-get -y install postgresql-client mysql-client git
 
   if [ $fileServerType = "gluster" ]; then
