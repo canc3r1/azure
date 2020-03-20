@@ -50,10 +50,12 @@ check_fileServerType_param $fileServerType
   # make sure the system does automatic update
   sudo apt-get -y update
   sudo apt-get -y install unattended-upgrades
+  sudo apt-get -y upgrade
 
   # install pre-requisites
-  sudo apt-get -y install python-software-properties unzip rsyslog
-
+  sudo apt-get -y install python-software-properties software-properties-common unzip rsyslog
+  sudo add-apt-repository -y ppa:ondrej/php
+  sudo apt-get -y update
   sudo apt-get -y install postgresql-client mysql-client git
 
   if [ $fileServerType = "gluster" ]; then
@@ -66,7 +68,7 @@ check_fileServerType_param $fileServerType
   fi
 
   # install the base stack
-  sudo apt-get -y install varnish php php-cli php-curl php-zip php-pear php-mbstring php-dev mcrypt
+  sudo apt-get -y install varnish php7.2 php7.2-cli php7.2-curl php7.2-zip php-pear php7.2-mbstring php7.2-dev mcrypt
 
   if [ "$webServerType" = "nginx" -o "$httpsTermination" = "VMSS" ]; then
     sudo apt-get -y install nginx
@@ -74,10 +76,10 @@ check_fileServerType_param $fileServerType
 
   if [ "$webServerType" = "apache" ]; then
     # install apache pacakges
-    sudo apt-get -y install apache2 libapache2-mod-php
+    sudo apt-get -y install apache2 libapache2-mod-php7.2
   else
     # for nginx-only option
-    sudo apt-get -y install php-fpm
+    sudo apt-get -y install php7.2-fpm
   fi
 
   # Moodle requirements
