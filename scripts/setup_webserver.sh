@@ -57,13 +57,12 @@ check_fileServerType_param $fileServerType
   
   sudo add-apt-repository -y ppa:ondrej/php >> /tmp/apt2.log
   
-  sudo apt-get -y update 
+  sudo apt-get -y update
+  sudo apt-get -y upgrade
   
   sudo apt-get -y -f install postgresql-client mysql-client git >> /tmp/apt3.log 
   
-  sudo dpkg --configure -a
-
-  if [ $fileServerType = "gluster" ]; then
+   if [ $fileServerType = "gluster" ]; then
     #configure gluster repository & install gluster client
     sudo add-apt-repository ppa:gluster/glusterfs-3.10 -y
     sudo apt-get -y update
@@ -73,12 +72,11 @@ check_fileServerType_param $fileServerType
   fi
 
   # install the base stack
-  sudo apt-get -y -f install varnish php7.2 php7.2-cli php7.2-curl php7.2-zip php-pear php7.2-mbstring php7.2-dev mcrypt >> /tmp/apt4.log 
-  sudo dpkg --configure -a
-
-  if [ "$webServerType" = "nginx" -o "$httpsTermination" = "VMSS" ]; then
-    sudo apt-get -y install nginx
-  fi
+  sudo apt-get -y -f install nginx varnish php7.2 php7.2-cli php7.2-curl php7.2-zip php-pear php7.2-mbstring php7.2-dev mcrypt >> /tmp/apt4.log 
+  
+ # if [ "$webServerType" = "nginx" -o "$httpsTermination" = "VMSS" ]; then
+  # sudo apt-get -y install nginx
+  # fi
 
   if [ "$webServerType" = "apache" ]; then
     # install apache pacakges
