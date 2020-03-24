@@ -72,7 +72,7 @@ check_fileServerType_param $fileServerType
   fi
 
   # install the base stack
-  sudo apt-get -y -f install nginx varnish php7.2 php7.2-cli php7.2-curl php7.2-zip php-pear php7.2-mbstring php7.2-dev mcrypt >> /tmp/apt4.log 
+  sudo apt-get -y -f install nginx varnish php7.2 php7.2-cli php7.2-curl php7.2-zip php-pear php7.2-mbstring php7.2-dev mcrypt || true
   
  # if [ "$webServerType" = "nginx" -o "$httpsTermination" = "VMSS" ]; then
   # sudo apt-get -y install nginx
@@ -80,14 +80,14 @@ check_fileServerType_param $fileServerType
 
   if [ "$webServerType" = "apache" ]; then
     # install apache pacakges
-    sudo apt-get -y -f install apache2 libapache2-mod-php7.2 >> /tmp/apt5.log 
+    sudo apt-get -y -f install apache2 libapache2-mod-php7.2 || true
   else
     # for nginx-only option
     sudo apt-get -y install php7.2-fpm
   fi
 
   # Moodle requirements
-  sudo apt-get install -y -f graphviz aspell php7.2-soap php7.2-json php-redis php7.2-bcmath php7.2-gd php7.2-pgsql php7.2-mysql php7.2-xmlrpc php7.2-intl php7.2-xml php7.2-bz2 >> /tmp/phpapt.log 
+  sudo apt-get install -y -f graphviz aspell php7.2-soap php7.2-json php-redis php7.2-bcmath php7.2-gd php7.2-pgsql php7.2-mysql php7.2-xmlrpc php7.2-intl php7.2-xml php7.2-bz2 || true
   if [ "$dbServerType" = "mssql" ]; then
     install_php_mssql_driver
   fi
